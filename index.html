@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test RGB API</title>
+</head>
+<body> 
+    <h2>Send RGB Values</h2>
+    <form id="rgb-form">
+        R: <input type="number" id="r" name="r" min="0" max="255"><br>
+        G: <input type="number" id="g" name="g" min="0" max="255"><br>
+        B: <input type="number" id="b" name="b" min="0" max="255"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        document.getElementById('rgb-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const data = {
+                r: document.getElementById('r').value,
+                g: document.getElementById('g').value,
+                b: document.getElementById('b').value
+            };
+
+            fetch('http://localhost:8081/getColor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank').focus();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
